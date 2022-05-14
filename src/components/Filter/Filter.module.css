@@ -1,4 +1,27 @@
 .label {
-    display: block;
-    margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.title {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.input {
+  padding: 2px 5px;
+  margin-top: 6px;
+  width: 300px;
+  margin-left: 100px;
+}
+
+.input:hover,
+.input:focus {
+  border-color: rgb(82, 82, 219);
+  border-radius: 4px;
+
+  transition: all 250ms linear;
 }

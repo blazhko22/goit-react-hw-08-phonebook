@@ -1,0 +1,18 @@
+.link {
+  display: inline-block;
+  text-decoration: none;
+  padding: 15px;
+  font-weight: 700;
+  color: #2a363b;
+  border-radius: 4px;
+  background-color: orange;
+  margin-right: 5px;
+}
+
+.link:last-child {
+  margin-right: 0;
+}
+
+.activeLink {
+  color: #e0e0e0;
+}

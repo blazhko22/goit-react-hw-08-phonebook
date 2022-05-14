@@ -1,66 +1,84 @@
+import React, { useState } from 'react';
+import { connect, useSelector } from 'react-redux';
+import { addContact } from '../../redux/contacts/contacts-operations';
+import { getContacts } from '../../redux/contacts/contacts-selectors';
 import PropTypes from 'prop-types';
-
-import { useState } from 'react';
-import { useCreateContactMutation } from '../../redux/contactsSlice';
-
 import s from './ContactForm.module.css';
 
-const shortid = require('shortid');
-const nameInputId = shortid.generate();
-const numberInputId = shortid.generate();
+function ContactForm({ onSubmit }) {
+  const contacts = useSelector(getContacts);
 
-export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const [addContact] = useCreateContactMutation();
 
-  const handleChangeName = e => {
-    setName(e.currentTarget.value);
-  };
+  const handleInputChange = event => {
+    const { name, value } = event.target;
 
-  const handleChangeNumber = e => {
-    setNumber(e.currentTarget.value);
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'number':
+        setNumber(value);
+        break;
+      default:
+        return;
+    }
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    addContact({name, phone: number,})
+    if (contacts.some(contact => contact.name === name)) {
+      return alert(`${name} is already in contacts!`);
+    }
+
+    onSubmit({ name, number });
+
+    reset();
+  };
+
+  const reset = () => {
     setName('');
     setNumber('');
-
-    e.currentTarget.reset();
   };
 
   return (
     <form className={s.form} onSubmit={handleSubmit}>
-      <label htmlFor={nameInputId}>
+      <label>
         Name
         <input
-          className={s.input}
           type="text"
           name="name"
-          onChange={handleChangeName}
-          id={nameInputId}
+          className={s.input}
           required
+          value={name}
+          onChange={handleInputChange}
         />
       </label>
-      <label htmlFor={numberInputId}>
+      <label>
         Number
         <input
-          className={s.input}
           type="tel"
           name="number"
-          onChange={handleChangeNumber}
-          id={numberInputId}
+          className={s.input}
           required
+          value={number}
+          onChange={handleInputChange}
         />
       </label>
-      <button className={s.button} type="submit">Add contact</button>
+      <button type="submit" className={s.button}>
+        Add contact
+      </button>
     </form>
   );
 }
-
 ContactForm.propTypes = {
-  onSubmit: PropTypes.func,
+  onSubmit: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = dispatch => ({
+  onSubmit: text => dispatch(addContact(text)),
+});
+
+export default connect(null, mapDispatchToProps)(ContactForm);

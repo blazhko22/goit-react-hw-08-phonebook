@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    background-color: tomato;
+    padding: 40px 50px;
+    margin: auto;
+    min-height: calc(100vh - 50px)
+}
+
+.titleFhonebook {
+    background-color: yellow;
+    padding: 5px 10px;
+}
+
+.titleContacts {
+    background-color: green;
+    padding: 5px 10px;
+    width: 500px;
+}

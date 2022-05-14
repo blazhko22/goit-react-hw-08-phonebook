@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-axios.defaults.baseURL = 'https://connections-api.herokuapp.com';
+axios.defaults.baseURL = 'https://connections-api.herokuapp.com/';
 
 const token = {
   set(token) {
@@ -17,22 +17,37 @@ const register = createAsyncThunk('auth/register', async credentials => {
     const { data } = await axios.post('/users/signup', credentials);
     token.set(data.token);
     return data;
-  } catch (error) {}
+  } catch (error) {
+
+    alert('This user is already exist!');
+
+    return Promise.reject(new Error(error));
+  }
 });
 
 const logIn = createAsyncThunk('auth/login', async credentials => {
   try {
     const { data } = await axios.post('/users/login', credentials);
+
     token.set(data.token);
     return data;
-  } catch (error) {}
+  } catch (error) {
+
+    alert('Invalid User or Password');
+
+    return Promise.reject(new Error(error));
+  }
 });
 
 const logOut = createAsyncThunk('auth/logout', async () => {
   try {
     await axios.post('/users/logout');
     token.unset();
-  } catch (error) {}
+  } catch (error) {
+  
+    console.log(error);
+    return Promise.reject(new Error(error));
+  }
 });
 
 const fetchCurrentUser = createAsyncThunk(
@@ -44,11 +59,15 @@ const fetchCurrentUser = createAsyncThunk(
     if (persistedToken === null) {
       return thunkAPI.rejectWithValue();
     }
+
     token.set(persistedToken);
     try {
       const { data } = await axios.get('/users/current');
       return data;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      return Promise.reject(new Error(error));
+    }
   }
 );
 

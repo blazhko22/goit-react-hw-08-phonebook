@@ -1,30 +1,18 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import ContactList from '../../components/ContactList/ContactList';
+import ContactForm from '../../components/ContactForm/ContactForm';
+import Filter from '../../components/Filter/Filter';
+import s from './ContactsView.module.css';
 
-import s from './ContactView.module.css'
-
-import contactsOperations  from '../../redux/contacts/contacts-operations';
-import ContactForm from '../../components/ContactForm';
-import ContactList from '../../components/ContactList';
-
-export default function ContctsView() {
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    function fetchContact(){
-       dispatch(contactsOperations.fetchContacts())
- }
- fetchContact()
- }, [dispatch]);
-
-  return (  
-    <div className={s.render}>
+export default function ContactsView() {
+  return (
+    <div className={s.container}>
       <div>
         <h1 className={s.titleFhonebook}>Phonebook</h1>
         <ContactForm />
       </div>
       <div>
         <h2 className={s.titleContacts}>Contacts</h2>
+        <Filter />
         <ContactList />
       </div>
     </div>

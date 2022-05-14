@@ -1,20 +1,32 @@
-import { useDispatch } from 'react-redux';
-import { useDebouncedCallback } from 'use-debounce';
-import { changeFilter } from '../../redux/reducers';
+import { connect } from 'react-redux';
+import * as contactsActions from '../../redux/contacts/contacts-actions';
+import PropTypes from 'prop-types';
 import s from './Filter.module.css';
 
-function Filter() {
-  const dispatch = useDispatch();
-  const setFilter = useDebouncedCallback(value => {
-    dispatch(changeFilter(value));
-  }, 500);
-
+function Filter({ value, onChange }) {
   return (
     <label className={s.label}>
-      Find contacts by name
-      <input type="text" name="filter" onChange={e => setFilter(e.target.value)} />
+      <span className={s.title}>Find contacts by name</span>
+      <input
+        type="text"
+        className={s.input}
+        value={value}
+        onChange={onChange}
+      />
     </label>
   );
 }
+Filter.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+};
 
-export default Filter;
+const mapStateToProps = state => ({
+  value: state.contacts.filter,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onChange: event => dispatch(contactsActions.changeFilter(event.target.value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

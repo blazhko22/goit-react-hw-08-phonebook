@@ -1,54 +1,40 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {
-  addContactsRequest,
-  addContactsSuccess,
-  addContactsError,
-  deleteContactsRequest,
-  deleteContactsSuccess,
-  deleteContactsError,
-  fetchContactsRequest,
-  fetchContactsSuccess,
-  fetchContactsError,
-} from './contacts-actions';
 
-
-
-const fetchContacts = () => async dispatch => {
-  dispatch(fetchContactsRequest());
-
-  try {
-    const { data } = await axios.get('/contacts');
-
-    dispatch(fetchContactsSuccess(data));
-  } catch (error) {
-    dispatch(fetchContactsError(error.message));
+export const fetchContacts = createAsyncThunk(
+  'contacts/fetchContacts',
+  async () => {
+    try {
+      const { data } = await axios.get('/contacts');
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   }
-};
+);
 
-const addContacts=  (name, number) => async dispatch => {
-  const contact = { name, number };
+export const deleteContact = createAsyncThunk(
+  'contacts/deleteContact',
+  async contactId => {
+    try {
+      await axios.delete(`/contacts/${contactId}`);
+      return contactId;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
-  dispatch(addContactsRequest());
+export const addContact = createAsyncThunk(
+  'contacts/addContact',
+  async ({ name, number }) => {
+    try {
+      const contact = { name, number };
 
-  axios
-    .post('/contacts', contact)
-    .then(({ data }) => dispatch(addContactsSuccess(data)))
-    .catch(error => dispatch(addContactsError(error.message)));
-};
-
-const deleteContacts = contactId => async dispatch => {
-  dispatch(deleteContactsRequest());
-
-  axios
-    .delete(`/contacts/${contactId}`)
-    .then(() => dispatch(deleteContactsSuccess(contactId)))
-    .catch(error => dispatch(deleteContactsError(error.message)));
-};
-
-
-const contactsOperations = {
-  fetchContacts,
-  addContacts,
-  deleteContacts,
-};
-export default contactsOperations;
+      const { data } = await axios.post('/contacts', contact);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
