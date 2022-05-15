@@ -24,6 +24,9 @@ export default function RegisterView() {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if (!name) return alert('Please enter user name');
+    if (!email) return alert('Please enter email');
+    if (!password) return alert('Please enter password');
     dispatch(authOperations.register({ name, email, password }));
     setName('');
     setEmail('');

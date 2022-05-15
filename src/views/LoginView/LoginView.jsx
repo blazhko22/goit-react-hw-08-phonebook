@@ -21,6 +21,8 @@ export default function LoginView() {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if (!email) return alert('Please enter email');
+    if (!password) return alert('Please enter password');
     dispatch(authOperations.logIn({ email, password }));
     setEmail('');
     setPassword('');

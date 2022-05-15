@@ -31,6 +31,7 @@ function App() {
           }
         >
           <Switch>
+            
             <PublicRoute path="/" exact>
               <HomeView />
             </PublicRoute>
@@ -43,7 +44,7 @@ function App() {
               <LoginView />
             </PublicRoute>
 
-            <PrivateRoute path="/contacts" redirectTo="/login">
+            <PrivateRoute path="/contacts" redirectTo="/login" exact>
               <ContactsView />
             </PrivateRoute>
 
